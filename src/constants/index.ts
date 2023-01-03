@@ -1,10 +1,15 @@
-export const RoutePath: RoutePathType = {
+export const RoutePath = {
   ROOT: '/',
   SIGNUP: '/auth/signup',
   LOGIN: '/auth/login',
 };
 
-export const LocalStorageIndex: LocalStorageIndexType = {
+export const LocalStorageIndex = {
   TOKEN: 'token',
   USERNAME: 'user_name',
+};
+
+export const ButtonContents = {
+  LOGIN: '로그인',
+  SIGNUP: '회원가입',
 };

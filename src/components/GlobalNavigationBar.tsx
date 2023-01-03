@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { RoutePath, LocalStorageIndex } from '../constants';
-import * as S from '../common/GlobalStyle';
-
-interface AuthButtonProps {
-  content: string;
-  navigateTarget: string;
-}
+import { RoutePath, LocalStorageIndex, ButtonContents } from '../constants';
+import NavigationButton from './NavagationButton';
 
 const GlobalNavigationBar = () => {
   const [isLoggedIn, setIsLiggedIn] = useState(false);
@@ -35,23 +30,16 @@ const GlobalNavigationBar = () => {
 export default GlobalNavigationBar;
 
 const AuthButtonContainer = () => {
-  return (
-    <>
-      <AuthButton content="로그인" navigateTarget={RoutePath.LOGIN}></AuthButton>
-      <AuthButton content="회원가입" navigateTarget={RoutePath.SIGNUP}></AuthButton>
-    </>
-  );
-};
-
-const AuthButton = ({ content, navigateTarget }: AuthButtonProps) => {
-  const navigate = useNavigate();
-  const clickHandler = () => {
-    navigate(navigateTarget);
+  const authButtonStyle = {
+    width: '5rem',
+    height: '2rem',
+    color: 'var(--color-main)',
   };
   return (
-    <S.ColoredButton width={'5rem'} height={'2rem'} color={'var(--color-main)'} onClick={clickHandler}>
-      {content}
-    </S.ColoredButton>
+    <>
+      <NavigationButton contents={ButtonContents.LOGIN} navigateTarget={RoutePath.LOGIN} buttonWidth={authButtonStyle.width} buttonHeight={authButtonStyle.height} buttonColor={authButtonStyle.color} />
+      <NavigationButton contents={ButtonContents.SIGNUP} navigateTarget={RoutePath.SIGNUP} buttonWidth={authButtonStyle.width} buttonHeight={authButtonStyle.height} buttonColor={authButtonStyle.color} />
+    </>
   );
 };
 
