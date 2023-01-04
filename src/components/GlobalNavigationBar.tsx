@@ -6,11 +6,10 @@ import NavigationButton from './NavagationButton';
 
 const GlobalNavigationBar = () => {
   const [isLoggedIn, setIsLiggedIn] = useState(false);
-  const [userName, setUserName] = useState<string | null>('박경찬');
+  const [userName, setUserName] = useState<string | null>(null);
   const navigate = useNavigate();
   const titleClickHandler = () => {
     navigate(RoutePath.ROOT);
-    setIsLiggedIn(!isLoggedIn);
   };
   useEffect(() => {
     if (localStorage.getItem(LocalStorageIndex.TOKEN)) {
@@ -22,14 +21,14 @@ const GlobalNavigationBar = () => {
     <GNBContainer>
       <LogoImage imageSrc="/logo.png" onClick={titleClickHandler} />
       <MainTitle onClick={titleClickHandler}>Wanted TodoList</MainTitle>
-      <AuthContainer>{isLoggedIn ? <WelcomeComment> {userName}님 안녕하세요!</WelcomeComment> : <AuthButtonContainer />}</AuthContainer>
+      <UserContainer>{isLoggedIn ? <WelcomeComment> {userName}님 안녕하세요!</WelcomeComment> : <AuthButtonList />}</UserContainer>
     </GNBContainer>
   );
 };
 
 export default GlobalNavigationBar;
 
-const AuthButtonContainer = () => {
+const AuthButtonList = () => {
   const authButtonStyle = {
     width: '5rem',
     height: '2rem',
@@ -51,7 +50,7 @@ const GNBContainer = styled.div`
   align-items: center;
 `;
 
-const AuthContainer = styled.div`
+const UserContainer = styled.div`
   width: 15rem;
   float: right;
   display: flex;
