@@ -4,13 +4,14 @@ import styled from 'styled-components';
 interface UserInputProps {
   label: string;
   type: string;
+  onChangeHandler: React.ChangeEventHandler;
 }
 
-const UserInput = ({ label, type }: UserInputProps) => {
+const UserInput = ({ label, type, onChangeHandler }: UserInputProps) => {
   return (
     <UserInputLabel>
       {label}
-      <input type={type} />
+      <input type={type} onChange={onChangeHandler} />
     </UserInputLabel>
   );
 };
