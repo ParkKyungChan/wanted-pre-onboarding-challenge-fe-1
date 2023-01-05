@@ -2,28 +2,32 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface UserInputProps {
+  value?: string;
   label: string;
+  color: string;
   type: string;
   onChangeHandler: React.ChangeEventHandler;
 }
 
-const UserInput = ({ label, type, onChangeHandler }: UserInputProps) => {
+const UserInput = ({ value, label, color, type, onChangeHandler }: UserInputProps) => {
   return (
-    <UserInputLabel>
+    <UserInputLabel color={color}>
       {label}
-      <input type={type} onChange={onChangeHandler} />
+      <input value={value} type={type} onChange={onChangeHandler} />
     </UserInputLabel>
   );
 };
 
 export default UserInput;
 
-const UserInputLabel = styled.label`
-  width: 19rem;
+const UserInputLabel = styled.label<{
+  color: string;
+}>`
+  width: 20rem;
   height: 2rem;
   line-height: 2rem;
   margin: 1.5rem auto;
-  color: var(--color-main);
+  color: ${(props) => props.color};
   font-family: 'Work Sans', sans-serif;
   font-size: 1.5rem;
   font-weight: 500;
