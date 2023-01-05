@@ -16,11 +16,22 @@ export const ButtonContents = {
 
 export const API_URL = {
   LOGIN: '/users/login',
+  GET_TODO: '/todos',
+  CREATE_TODO: '/todos',
+  MODIFY_TODO: '/todos',
 };
 
 export const API_METHODS = {
   GET: 'GET',
   POST: 'POST',
+  PUT: 'PUT',
 };
+
+export const TodoInputFormMode = {
+  CREATE: 'create',
+  MODIFY: 'modify',
+};
+
+export const TodoListColumnTitles: string[] = ['Title', 'Detail'];
 
 export const HOST = 'http://localhost:8080';

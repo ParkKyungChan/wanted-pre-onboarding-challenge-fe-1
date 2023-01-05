@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import UserInput from '../components/UserInput';
@@ -32,8 +32,8 @@ const LogInPage = () => {
       <LogInFormContainer>
         <LogInFormTitle>Login</LogInFormTitle>
         <InputList>
-          <UserInput label="ID" type="text" onChangeHandler={onChangeIdInput} />
-          <UserInput label="PW" type="password" onChangeHandler={onChangePwInput} />
+          <UserInput label="ID" color={'var(--color-main)'} type="text" onChangeHandler={onChangeIdInput} />
+          <UserInput label="PW" color={'var(--color-main)'} type="password" onChangeHandler={onChangePwInput} />
         </InputList>
         <LoginButton isActive={isLoginButtonActive} onClick={handleLoginButtonClick}>
           Login
@@ -48,7 +48,7 @@ export default LogInPage;
 const LogInFormContainer = styled.div`
   width: 30rem;
   height: 20rem;
-  margin: 12rem auto;
+  margin: 10rem auto;
   display: flex;
   flex-direction: column;
   align-items: center;
