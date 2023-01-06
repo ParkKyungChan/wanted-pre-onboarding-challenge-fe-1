@@ -24,3 +24,28 @@ export const postLoginRequest = (email: string, password: string) => {
     .catch((err) => console.log(err));
   return userToekn;
 };
+
+export const postSignUpRequest = (email: string, password: string) => {
+  const signupRequestBody = {
+    email: email,
+    password: password,
+  };
+  const userToekn = fetch(`${HOST}${API_URL.SIGNUP}`, {
+    method: API_METHODS.POST,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(signupRequestBody),
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data: AuthResponse) => {
+      const { message, token, details } = data;
+      if (!token) alert(details);
+      else alert(message);
+      return token;
+    })
+    .catch((err) => console.log(err));
+  return userToekn;
+};

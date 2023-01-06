@@ -21,7 +21,7 @@ const HTTPTodoRequests = (method: string, body: any, url: string, id: string) =>
 };
 
 export const getTodosRequest = (): Promise<TodoItems[]> => {
-  const response = HTTPTodoRequests(API_METHODS.GET, null, API_URL.GET_TODO, '');
+  const response = HTTPTodoRequests(API_METHODS.GET, null, API_URL.TODO, '');
   const userTodos = response
     .then((data: APIResponse<TodoItems[]>) => {
       return data.data;
@@ -38,7 +38,7 @@ export const createTodosRequest = (title: string, detail: string): Promise<TodoI
     title: title,
     content: detail,
   };
-  const response = HTTPTodoRequests(API_METHODS.POST, JSON.stringify(createTodoBody), API_URL.CREATE_TODO, '');
+  const response = HTTPTodoRequests(API_METHODS.POST, JSON.stringify(createTodoBody), API_URL.TODO, '');
   const userTodos = response
     .then((data: APIResponse<TodoItems>) => {
       return data.data;
@@ -55,7 +55,7 @@ export const modifyTodosRequest = (title: string, detail: string, id: string): P
     title: title,
     content: detail,
   };
-  const response = HTTPTodoRequests(API_METHODS.PUT, JSON.stringify(createTodoBody), API_URL.MODIFY_TODO, id);
+  const response = HTTPTodoRequests(API_METHODS.PUT, JSON.stringify(createTodoBody), API_URL.TODO, id);
   const userTodos = response
     .then((data: APIResponse<TodoItems>) => {
       return data.data;
@@ -68,7 +68,7 @@ export const modifyTodosRequest = (title: string, detail: string, id: string): P
 };
 
 export const getTodoRequest = (id: string): Promise<TodoItems | null> => {
-  const response = HTTPTodoRequests(API_METHODS.GET, null, API_URL.MODIFY_TODO, id);
+  const response = HTTPTodoRequests(API_METHODS.GET, null, API_URL.TODO, id);
   const userTodos = response
     .then((data: APIResponse<TodoItems>) => {
       return data.data;
@@ -76,6 +76,18 @@ export const getTodoRequest = (id: string): Promise<TodoItems | null> => {
     .catch((err) => {
       console.log(err);
       return null;
+    });
+  return userTodos;
+};
+
+export const deleteTodoRequest = (id: string) => {
+  const response = HTTPTodoRequests(API_METHODS.DELETE, null, API_URL.TODO, id);
+  const userTodos = response
+    .then((data: APIResponse<null>) => {
+      return data.data;
+    })
+    .catch((err) => {
+      console.log(err);
     });
   return userTodos;
 };
