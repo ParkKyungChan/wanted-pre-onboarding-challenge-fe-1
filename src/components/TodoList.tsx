@@ -4,16 +4,28 @@ import TodoItem from './TodoItem';
 
 interface TodoListProps {
   todoList: TodoItems[];
-  selectedTodo: string | null;
-  setSelectedTodo: React.Dispatch<string>;
+  selectedTodo: TodoItems | null;
+  setSelectedTodo: React.Dispatch<TodoItems>;
   modifyButtonHandler: React.MouseEventHandler;
+  deleteButtonHandler: React.MouseEventHandler;
 }
 
-const TodoList = ({ todoList, selectedTodo, setSelectedTodo, modifyButtonHandler }: TodoListProps) => {
+const TodoList = ({ todoList, selectedTodo, setSelectedTodo, modifyButtonHandler, deleteButtonHandler }: TodoListProps) => {
   return (
     <TodoListContainer>
       {todoList.map(({ title, id, content }) => {
-        return <TodoItem key={id} title={title} id={id} content={content} isSelected={selectedTodo !== null && selectedTodo === id} modifyButtonHandler={modifyButtonHandler} itemClickHandler={setSelectedTodo} />;
+        return (
+          <TodoItem
+            key={id}
+            title={title}
+            id={id}
+            content={content}
+            isSelected={selectedTodo !== null && selectedTodo.id === id}
+            modifyButtonHandler={modifyButtonHandler}
+            itemClickHandler={setSelectedTodo}
+            deleteButtonHandler={deleteButtonHandler}
+          />
+        );
       })}
     </TodoListContainer>
   );
