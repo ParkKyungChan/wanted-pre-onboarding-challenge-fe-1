@@ -8,19 +8,20 @@ interface TodoItemProps {
   content: string;
   isSelected: boolean;
   modifyButtonHandler: React.MouseEventHandler;
-  itemClickHandler: React.Dispatch<string>;
+  itemClickHandler: React.Dispatch<TodoItems>;
+  deleteButtonHandler: React.MouseEventHandler;
 }
 
-const TodoItem = ({ title, id, content, isSelected, modifyButtonHandler, itemClickHandler }: TodoItemProps) => {
+const TodoItem = ({ title, id, content, isSelected, modifyButtonHandler, itemClickHandler, deleteButtonHandler }: TodoItemProps) => {
   return (
-    <TodoItemContainer onClick={() => itemClickHandler(id)}>
+    <TodoItemContainer onClick={() => itemClickHandler({ id: id, title: title, content: content })}>
       <span>{title}</span>
       {isSelected && (
         <>
           <ColoredButton width="2.5srem" height="1rem" color="var(--color-main)" onClick={modifyButtonHandler}>
             수정
           </ColoredButton>
-          <ColoredButton width="2.5rem" height="1rem" color="var(--color-main)">
+          <ColoredButton width="2.5rem" height="1rem" color="var(--color-main)" onClick={deleteButtonHandler}>
             삭제
           </ColoredButton>
         </>

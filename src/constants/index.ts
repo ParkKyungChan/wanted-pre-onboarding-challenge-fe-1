@@ -7,6 +7,7 @@ export const RoutePath = {
 export const LocalStorageIndex = {
   TOKEN: 'token',
   USERNAME: 'user_name',
+  SELECTED_TODO: 'todo',
 };
 
 export const ButtonContents = {
@@ -16,15 +17,15 @@ export const ButtonContents = {
 
 export const API_URL = {
   LOGIN: '/users/login',
-  GET_TODO: '/todos',
-  CREATE_TODO: '/todos',
-  MODIFY_TODO: '/todos',
+  SIGNUP: '/users/create',
+  TODO: '/todos',
 };
 
 export const API_METHODS = {
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
+  DELETE: 'DELETE',
 };
 
 export const TodoInputFormMode = {

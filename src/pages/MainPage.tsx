@@ -2,27 +2,36 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
 import TodoList from '../components/TodoList';
-import { createTodosRequest, getTodosRequest, modifyTodosRequest, getTodoRequest } from '../API/todo';
+import { createTodosRequest, getTodosRequest, modifyTodosRequest, getTodoRequest, deleteTodoRequest } from '../API/todo';
 import Modal from '../components/Modal';
-import { TodoListColumnTitles, TodoInputFormMode } from '../constants';
+import { TodoListColumnTitles, TodoInputFormMode, LocalStorageIndex } from '../constants';
 import TodoCreateForm from '../components/TodoCreateForm';
+import TodoContents from '../components/TodoContents';
 
 const MainPage = () => {
   const [userTodos, setUserTodos] = useState<TodoItems[]>([]);
   const [isTodoCreateModalOpen, setIsTodoCreateModalOpen] = useState(false);
   const [todoFormMode, setTodoFormMode] = useState(TodoInputFormMode.CREATE);
-  const [todoTitle, onTodoTitleChange, setTodoTitle] = useInput();
-  const [todoDetail, onTodoDetailChange, setTodoDetail] = useInput();
-  const [selectedTodo, setSelectedTodo] = useState<string | null>(null);
+  const [todoTitle, onTodoTitleChange, setTodoTitleInput] = useInput();
+  const [todoDetail, onTodoDetailChange, setTodoDetailInput] = useInput();
+  const [selectedTodo, setSelectedTodo] = useState<TodoItems | null>(null);
 
   const getUserTodos = async () => {
     const todos = await getTodosRequest();
-    setUserTodos(todos);
+    setUserTodos([...todos]);
   };
 
   const refreshTodoinput = () => {
-    setTodoTitle('');
-    setTodoDetail('');
+    setTodoTitleInput('');
+    setTodoDetailInput('');
+  };
+
+  const refreshSelectedTodo = async () => {
+    const response = await getTodoById();
+    if (response) {
+      const { title, content } = response;
+      setSelectedTodo({ id: selectedTodo!.id, title: title, content: content });
+    }
   };
 
   const handleTodoSubmitButtonClick = async () => {
@@ -32,31 +41,53 @@ const MainPage = () => {
       else alert('할일 추가에 실패하였습니다.');
     } else if (todoFormMode === TodoInputFormMode.MODIFY) {
       if (!selectedTodo) return;
-      const response = await modifyTodosRequest(todoTitle, todoDetail, selectedTodo);
+      const response = await modifyTodosRequest(todoTitle, todoDetail, selectedTodo.id);
       if (response) alert('할일이 정상적으로 수정되었습니다');
       else alert('할일 수정에 실패하였습니다.');
     }
     refreshTodoinput();
-    getUserTodos();
+    await getUserTodos();
+    refreshSelectedTodo();
     setIsTodoCreateModalOpen(false);
+  };
+
+  const handleTodoDeleteButtonClick = async () => {
+    await deleteTodoRequest(selectedTodo!.id);
+    alert('할일이 삭제되었습니다.');
+    setSelectedTodo(null);
+    getUserTodos();
+  };
+
+  const getTodoById = async () => {
+    if (!selectedTodo) return;
+    const response = await getTodoRequest(selectedTodo.id);
+    if (!response) return;
+    const { title, content } = response;
+    return { title, content };
   };
 
   const handleTodoInputFormOpen = async (mode: string) => {
     if (mode === TodoInputFormMode.MODIFY) {
-      if (!selectedTodo) return;
-      const response = await getTodoRequest(selectedTodo);
-      if (!response) return;
-      const { title, content } = response;
-      setTodoTitle(title);
-      setTodoDetail(content);
+      setTodoTitleInput(selectedTodo!.title);
+      setTodoDetailInput(selectedTodo!.content);
+    } else {
+      setTodoTitleInput('');
+      setTodoDetailInput('');
     }
     setTodoFormMode(mode);
     setIsTodoCreateModalOpen(true);
   };
 
   useEffect(() => {
+    const todoHistory = localStorage.getItem(LocalStorageIndex.SELECTED_TODO) ? JSON.parse(localStorage.getItem(LocalStorageIndex.SELECTED_TODO)!) : null;
+    console.log(todoHistory);
     getUserTodos();
+    setSelectedTodo(todoHistory);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(LocalStorageIndex.SELECTED_TODO, JSON.stringify(selectedTodo));
+  }, [selectedTodo]);
 
   return (
     <>
@@ -67,7 +98,8 @@ const MainPage = () => {
           })}
         </MainTitle>
         <TodosContainer>
-          <TodoList todoList={userTodos} selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} modifyButtonHandler={() => handleTodoInputFormOpen(TodoInputFormMode.MODIFY)} />
+          <TodoList todoList={userTodos} selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} modifyButtonHandler={() => handleTodoInputFormOpen(TodoInputFormMode.MODIFY)} deleteButtonHandler={handleTodoDeleteButtonClick} />
+          {selectedTodo && <TodoContents currentTodo={selectedTodo} />}
         </TodosContainer>
         <CreateTodoButton onClickHandler={() => handleTodoInputFormOpen(TodoInputFormMode.CREATE)} />
       </MainContainer>

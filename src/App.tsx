@@ -5,6 +5,7 @@ import { RoutePath } from './constants';
 import GlobalNavigationBar from './components/GlobalNavigationBar';
 import LogInPage from './pages/LogInPage';
 import MainPage from './pages/MainPage';
+import SignUpPage from './pages/SignupPage';
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
       <Routes>
         <Route path={RoutePath.ROOT} element={<MainPage />} />
         <Route path={RoutePath.LOGIN} element={<LogInPage />} />
-        {/* <Route path={RoutePath.SIGNUP} element={} /> */}
+        <Route path={RoutePath.SIGNUP} element={<SignUpPage />} />
       </Routes>
     </Router>
   );
