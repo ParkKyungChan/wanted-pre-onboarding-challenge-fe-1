@@ -12,18 +12,26 @@ const MainPage = () => {
   const [userTodos, setUserTodos] = useState<TodoItems[]>([]);
   const [isTodoCreateModalOpen, setIsTodoCreateModalOpen] = useState(false);
   const [todoFormMode, setTodoFormMode] = useState(TodoInputFormMode.CREATE);
-  const [todoTitle, onTodoTitleChange, setTodoTitle] = useInput();
-  const [todoDetail, onTodoDetailChange, setTodoDetail] = useInput();
+  const [todoTitle, onTodoTitleChange, setTodoTitleInput] = useInput();
+  const [todoDetail, onTodoDetailChange, setTodoDetailInput] = useInput();
   const [selectedTodo, setSelectedTodo] = useState<TodoItems | null>(null);
 
   const getUserTodos = async () => {
     const todos = await getTodosRequest();
-    setUserTodos(todos);
+    setUserTodos([...todos]);
   };
 
   const refreshTodoinput = () => {
-    setTodoTitle('');
-    setTodoDetail('');
+    setTodoTitleInput('');
+    setTodoDetailInput('');
+  };
+
+  const refreshSelectedTodo = async () => {
+    const response = await getTodoById();
+    if (response) {
+      const { title, content } = response;
+      setSelectedTodo({ id: selectedTodo!.id, title: title, content: content });
+    }
   };
 
   const handleTodoSubmitButtonClick = async () => {
@@ -38,7 +46,8 @@ const MainPage = () => {
       else alert('할일 수정에 실패하였습니다.');
     }
     refreshTodoinput();
-    getUserTodos();
+    await getUserTodos();
+    refreshSelectedTodo();
     setIsTodoCreateModalOpen(false);
   };
 
@@ -59,14 +68,11 @@ const MainPage = () => {
 
   const handleTodoInputFormOpen = async (mode: string) => {
     if (mode === TodoInputFormMode.MODIFY) {
-      const response = await getTodoById();
-      if (!response) return;
-      const { title, content } = response;
-      setTodoTitle(title);
-      setTodoDetail(content);
+      setTodoTitleInput(selectedTodo!.title);
+      setTodoDetailInput(selectedTodo!.content);
     } else {
-      setTodoTitle('');
-      setTodoDetail('');
+      setTodoTitleInput('');
+      setTodoDetailInput('');
     }
     setTodoFormMode(mode);
     setIsTodoCreateModalOpen(true);
